@@ -6,17 +6,16 @@ def read_text_file (file_path):
 
     return data
 
+# def four_wise(iterator):
 
-def four_wise(iterator):
+#     iteratror = iter(iterator)
 
-    iteratror = iter(iterator)
+#     while True:
+#         try:
+#             pass
 
-    while True:
-        try:
-            pass
-
-        except StopIteration:
-            break
+#         except StopIteration:
+#             break
 
 def part_1(data):
     return(marker(data, 4))
@@ -25,7 +24,6 @@ def part_2(data):
     return(marker(data, 14))
 
 def marker (data, marker_len):
-
     for i in range(len(data) - (marker_len + 1)):
         s = set(data[i:i+marker_len])
         if len(s) == marker_len:
