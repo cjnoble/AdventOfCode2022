@@ -32,6 +32,6 @@ def calc(data):
     print(sum(sum_total[:3]))
 
 
-data = read_text_file ("1.txt")
+data = read_text_file ("1_other.txt")
 
 calc(data)

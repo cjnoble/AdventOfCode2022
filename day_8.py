@@ -7,7 +7,6 @@ def read_text_file (file_path):
 
     return data
 
-
 class Tree(object):
     def __init__(self, x, y, height, visible: bool):
         self.x = x
@@ -96,7 +95,6 @@ def part_2(data):
             best_tree = tree
 
     return best_tree.score
-
 
 if __name__ == "__main__":
 
