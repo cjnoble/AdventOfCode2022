@@ -106,9 +106,6 @@ def part_1(moves):
     return len(tail.pos_visited)
 
 def part_2(moves, N):
-
-    
-
     heads = [Head(n=i) for i in range (N)]
     heads.append(None)
     for head_1, head_2 in pairwise(heads):
@@ -117,7 +114,6 @@ def part_2(moves, N):
         tail.next_head = head_2
 
     for move in moves:
-
         move = re.match("([LRUD]) (\d+)", move)
         direction = move.group(1)
         i = int(move.group(2))
