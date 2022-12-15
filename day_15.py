@@ -1,4 +1,5 @@
 import re
+from functools import reduce
 
 
 def read_text_file (file_path):
@@ -44,6 +45,16 @@ class Sensor(object):
         else:
             return False
 
+    def end_row (self, y):
+        '''
+        last x in a given row y that is in range of beacon
+        '''
+
+        if not self.within_beacon_dist(self.x, y):
+            raise Exception("y not in range")
+
+        return (self.beacon_dist - abs(y - self.y)) + self.x
+
 
 
 def part_1(data, y):
@@ -71,18 +82,67 @@ def part_1(data, y):
                     #print(x, y)
                 break
 
-
     return no_beacon_count
 
+def part_2(data, max_b):
+    min_b = 0
 
+    sensors = []
 
-def part_2():
+    for row in data:
+        print(row)
+
+        match = re.match("Sensor at x=(-*\d+), y=(-*\d+): closest beacon is at x=(-*\d+), y=(-*\d+)", row)
+        sensors.append(Sensor(*(int(i) for i in match.groups())))
+
+    for y in range(min_b, max_b+1):
+        for x in range(min_b, max_b+1):            
+            test = [sensor.within_beacon_dist(x, y) for sensor in sensors]
+            test = reduce(lambda x,y: x|y , test)
+            if not test:
+                return x*4000000 + y
+
+def part_2_fast(data, max_b):
+
+    sensors = []
+
+    for row in data:
+        print(row)
+
+        match = re.match("Sensor at x=(-*\d+), y=(-*\d+): closest beacon is at x=(-*\d+), y=(-*\d+)", row)
+        sensors.append(Sensor(*(int(i) for i in match.groups())))
 
     min_b = 0
-    max_b = 4000000
+    x = 0
+    y = 0
+    in_range_flag = False
 
+    while True:
+        while True:
+            
+            for sensor in sensors:
+                if sensor.within_beacon_dist(x, y):
+                    x = sensor.end_row(y)
+                    in_range_flag = True
+                    break
+
+            if not in_range_flag:
+                print(x, y)
+                return x*4000000 + y
+
+            x += 1
+            in_range_flag = False
+            if x >= max_b:
+                x = 0
+                break
+        y+= 1
+        if y >= max_b:
+            y = 0
+            break
 
 if __name__ == "__main__":
 
     data = read_text_file("15.txt")
-    print(part_1(data, 2000000))
+    #print(part_1(data, 2000000))
+
+    print(part_2_fast(data, 4000000))
