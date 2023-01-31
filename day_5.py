@@ -60,6 +60,10 @@ class Stack(object):
     def __str__ (self):
         return self.__repr__()
 
+    @staticmethod
+    def static_test():
+        pass
+
 def read_text_file (file_path):
 
     with open(file_path, "r") as f:
@@ -69,66 +73,64 @@ def read_text_file (file_path):
     return data
 
 
+class Crane (object):
+    def __init__(self):
 
-def init():
+        stacks = ["FDBZTJRN", "RSNJH", "CRNJGZFQ", "FVNGRTQ", "LTQF", "QCWZBRGN", "FCLSNHM", "DNQMTJ", "PGS"]
 
-    stacks = ["FDBZTJRN", "RSNJH", "CRNJGZFQ", "FVNGRTQ", "LTQF", "QCWZBRGN", "FCLSNHM", "DNQMTJ", "PGS"]
+        self.stacks = [Stack(s) for s in stacks]
 
-    stacks = [Stack(s) for s in stacks]
+    def parse_instruction(self, instruction):
 
-    return stacks
+        match = re.findall(("\d+"), instruction)
 
-def parse_instruction(stacks, instruction):
+        n = int(match[0])
+        m_from = int(match[1]) - 1
+        m_to = int(match[2]) - 1
 
-    match = re.findall(("\d+"), instruction)
+        for i in range(n):
+            A = self.stacks[m_from].pop()
+            self.stacks[m_to].push(A)
 
-    n = int(match[0])
-    m_from = int(match[1]) - 1
-    m_to = int(match[2]) - 1
+    def parse_instruction_2(self, instruction):
 
-    for i in range(n):
-        A = stacks[m_from].pop()
-        stacks[m_to].push(A)
+        match = re.findall(("\d+"), instruction)
 
-def parse_instruction_2(stacks, instruction):
+        n = int(match[0])
+        m_from = int(match[1]) - 1
+        m_to = int(match[2]) - 1
 
-    match = re.findall(("\d+"), instruction)
+        A_list = []
 
-    n = int(match[0])
-    m_from = int(match[1]) - 1
-    m_to = int(match[2]) - 1
+        for i in range(n):
+            A_list.append(self.stacks[m_from].pop())
+        
+        A_list.reverse()
 
-    A_list = []
-
-    for i in range(n):
-        A_list.append(stacks[m_from].pop())
-    
-    A_list.reverse()
-
-    for A in A_list:
-        stacks[m_to].push(A)
+        for A in A_list:
+            self.stacks[m_to].push(A)
 
 def part_1(data):
 
-    stacks = init()
+    crane = Crane()
 
     for row in data:
-        print(stacks)
-        parse_instruction(stacks, row)
+        print(crane.stacks)
+        crane.parse_instruction(row)
 
-    print([s.top() for s in stacks])
+    print([s.top() for s in crane.stacks])
 
     return
 
 def part_2(data):
 
-    stacks = init()
+    crane = Crane()
 
     for row in data:
-        print(stacks)
-        parse_instruction_2(stacks, row)
+        print(crane.stacks)
+        crane.parse_instruction_2( row)
 
-    print("".join([s.top() for s in stacks]))
+    print("".join([s.top() for s in crane.stacks]))
 
     return
 
