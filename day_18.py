@@ -1,6 +1,6 @@
 import re
 from functools import reduce
-
+from collections import deque
 
 def read_text_file (file_path):
 
@@ -34,9 +34,41 @@ def part_1(data):
 
     return sum(drops.values())
 
+def part_2(data):
+
+    drops = set(tuple(int(t) for t in row) for row in data) 
+
+    max_search = max([max([row[i] for row in data]) for i in range(3)]) + 2
+    min_search = min([min([row[i] for row in data]) for i in range(3)]) - 2
+
+    already_searched = set()
+    search = deque()
+    search.append(tuple([min_search, min_search, min_search]))
+    faces = 0
+
+    while search:
+        
+        next = search.popleft()
+
+        print(next)
+
+        if next in drops:
+            faces += 1
+
+        else:
+            already_searched.add(next)
+            new = [(next[0] + 1, next[1], next[2]), (next[0], next[1]+1, next[2]), (next[0], next[1], next[2] + 1), (next[0] - 1, next[1], next[2]), (next[0], next[1]-1, next[2]), (next[0], next[1], next[2] - 1)]
+            new = [p for p in new if (p in drops or p not in search) and (p not in already_searched) and (max(p) < max_search) and (min(p) >= min_search)]
+
+            search.extend(new)
+
+    return faces
+
+
 if __name__ == "__main__":
 
     data = read_text_file("18.txt")
     #print(data)
     print(part_1(data))
+    print(part_2(data))
 
