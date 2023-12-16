@@ -93,7 +93,7 @@ def part_1(data, y):
     max_x = 0
     max_beacon_dist = 0
     for row in data:
-        print(row)
+        #print(row)
 
         match = re.match("Sensor at x=(-*\d+), y=(-*\d+): closest beacon is at x=(-*\d+), y=(-*\d+)", row)
         sensors.append(Sensor(*(int(i) for i in match.groups())))
@@ -138,7 +138,7 @@ def part_2_fast(data, max_b):
     for row in data:
         print(row)
 
-        match = re.match("Sensor at x=(-*\d+), y=(-*\d+): closest beacon is at x=(-*\d+), y=(-*\d+)", row)
+        match = re.match(r"Sensor at x=(-*\d+), y=(-*\d+): closest beacon is at x=(-*\d+), y=(-*\d+)", row)
         sensors.append(Sensor(*(int(i) for i in match.groups())))
 
     min_b = 0
@@ -156,7 +156,7 @@ def part_2_fast(data, max_b):
                     break
 
             if not in_range_flag:
-                print(x, y)
+                #print(x, y)
                 return x*4000000 + y
 
             x += 1
@@ -164,7 +164,7 @@ def part_2_fast(data, max_b):
             if x >= max_b:
                 x = 0
                 break
-        y+= 1
+        y += 1
         if y >= max_b:
             y = 0
             break
@@ -176,9 +176,10 @@ def part_2_morefast(data, max_b):
     start_set = sensors[0].gen_edges(0, max_b+1)
 
     for sensor in sensors[1:]:
-        start_set.intersection(sensor.gen_edges(0, max_b+1))
+        print(start_set)
+        start_set = start_set.intersection(sensor.gen_edges(0, max_b+1))
 
-    return start_set 
+    return start_set
 
 
 def gen_sensors(data):
@@ -198,4 +199,4 @@ if __name__ == "__main__":
     data = read_text_file("15.txt")
     #print(part_1(data, 2000000))
 
-    print(part_2_morefast(data, 4000000))
+    print(part_2_morefast(data, 4_000_000))

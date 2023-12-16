@@ -23,24 +23,24 @@ def folder_size (data: deque, name: str, data_dict: dict):
             data_dict[name]["size"] += size
             return name, size
 
-        elif f:= re.match("(\d+) ([A-Za-z]+)", next_c):
+        elif f:= re.match(r"(\d+) ([A-Za-z]+)", next_c):
             sub_name = f.groups(1)[0]
             sub_name = "\\".join([name,sub_name])
             if sub_name not in data_dict[name]["folders"]:
                 data_dict[name]["folders"].add(sub_name)
                 size += int(f.groups(0)[0])
 
-        elif f:= re.match("\$ cd ([A-Za-z]+[.]*[A-Za-z]*)", next_c):
+        elif f:= re.match(r"\$ cd ([A-Za-z]+[.]*[A-Za-z]*)", next_c):
             sub_name, sub_size = folder_size(data, "\\".join([name,f.groups(0)[0]]), data_dict)
             #sub_name = "\\".join(name,sub_name)
             if sub_name not in data_dict[name]["folders"]:
                 data_dict[name]["folders"].add(sub_name)
                 size += sub_size
 
-        elif f:= re.match("\$ ls", next_c):
+        elif f:= re.match(r"\$ ls", next_c):
             pass
 
-        elif f:= re.match("dir ([A-Za-z]+)", next_c):
+        elif f:= re.match(r"dir ([A-Za-z]+)", next_c):
             pass
 
         else:
@@ -52,7 +52,7 @@ def folder_size (data: deque, name: str, data_dict: dict):
 def part_1(data):
     data_dict = defaultdict(lambda : {"size": 0, "folders":set()})
 
-    print(folder_size(data, "\.", data_dict))
+    print(folder_size(data, r"\.", data_dict))
 
     MAX_SIZE = 100000
 
@@ -67,12 +67,12 @@ def part_1(data):
 def part_2(data):
     data_dict = defaultdict(lambda : {"size": 0, "folders":set()})
 
-    print(folder_size(data, "\.", data_dict))
+    print(folder_size(data, r"\.", data_dict))
 
     TOTAL_SIZE = 70000000
     REQUIRED_SIZE = 30000000
 
-    size_used = data_dict["\."]["size"]
+    size_used = data_dict[r"\."]["size"]
 
     del_size = REQUIRED_SIZE - (TOTAL_SIZE - size_used)
 
