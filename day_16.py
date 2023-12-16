@@ -49,9 +49,6 @@ def part_1(data, time):
 
     START = "AA"
 
-
-
-
     current_valves = deque([valves[START]])
     current_time = 0
 

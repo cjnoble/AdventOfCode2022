@@ -1,3 +1,15 @@
+from enum import Enum
+
+class Result(Enum):
+    WIN = 1
+    DRAW = 2
+    LOOSE = 3
+
+
+
+WIN_SCORE = 6
+DRAW_SCORE = 3
+LOOSE_SCORE = 0
 
 def read_text_file (file_path):
 
@@ -19,12 +31,14 @@ def calc(data):
     score = 0
 
     for row in data:
-        score += base_score[row[1]]
+        opponents_throw = row[0]
+        your_throw = row[1]
+        score += base_score[your_throw]
 
-        if win_combos[row[0]] == row[1]:
-            score += 6
-        elif draw_combos[row[0]] == row[1]:
-            score += 3
+        if win_combos[opponents_throw] == your_throw:
+            score += WIN_SCORE
+        elif draw_combos[opponents_throw] == your_throw:
+            score += DRAW_SCORE
 
     print(score)
 
@@ -40,13 +54,16 @@ def calc_2(data):
 
     for row in data:
         
-        if row[1] == "Z": 
+        if row[1] == "Z":
+            # You need to win
             res = win_combos[row[0]]
-            score += 6
+            score += WIN_SCORE
         elif row[1] == "Y":
-            score += 3
+            # You need to draw
+            score += DRAW_SCORE
             res = draw_combos[row[0]]
         else:
+            # You need to loose
             res = loose_combos[row[0]]
         
         score += base_score[res]

@@ -1,6 +1,6 @@
 import re
 from functools import reduce
-from collections import defaultdict
+from collections import deque
 
 def read_text_file (file_path):
 
@@ -29,82 +29,43 @@ def drop_test(drops):
 
     return sum(drops.values())
 
-def part_1(data):
-
-    drops = dict()
-
-    for row in data:
-        drops[tuple(t for t in row)] = 6
-
-    return drop_test(drops)
-
-
 def part_2(data):
 
-    drops = dict()
+    drops = set(tuple(int(t) for t in row) for row in data) 
 
-    for row in data:
-        drops[tuple(t for t in row)] = 6
+    max_search = max([max([row[i] for row in data]) for i in range(3)]) + 2
+    min_search = min([min([row[i] for row in data]) for i in range(3)]) - 2
 
-    x_max = max([d[0] for d in drops.keys()])
-    y_max = max([d[1] for d in drops.keys()])
-    z_max = max([d[2] for d in drops.keys()])
+    already_searched = set()
+    search = deque()
+    search.append(tuple([min_search, min_search, min_search]))
+    faces = 0
 
+    while search:
+        
+        next = search.popleft()
 
-    print(x_max, y_max, z_max)
+        print(next)
 
-    blocked = defaultdict(int)
+        if next in drops:
+            faces += 1
 
-    # Scan all rows
-    in_flag = False
-    for j in range (y_max+2):
-        for k in range (z_max+2):
-            for i in range (x_max+2):
-                if (i,j,k) in drops.keys():
-                    in_flag = not in_flag
-                    if in_flag:
-                        blocked_by = (i,j,k)
+        else:
+            already_searched.add(next)
+            new = [(next[0] + 1, next[1], next[2]), (next[0], next[1]+1, next[2]), (next[0], next[1], next[2] + 1), (next[0] - 1, next[1], next[2]), (next[0], next[1]-1, next[2]), (next[0], next[1], next[2] - 1)]
+            new = [p for p in new if (p in drops or p not in search) and (p not in already_searched) and (max(p) < max_search) and (min(p) >= min_search)]
 
-                elif in_flag:
-                    blocked[(i,j,k)] += 1
+            search.extend(new)
 
-    # Scan all columns
-    in_flag = False
-    for k in range (z_max+2):
-        for i in range (x_max+2):
-            for j in range (y_max+2):
-                if (i,j,k) in drops.keys():
-                    in_flag = not in_flag
-                    if in_flag:
-                        blocked_by = (i,j,k)
+    return faces
 
-                elif in_flag:
-                    blocked[(i,j,k)] += 1
-    
-    # scan last direction
-    in_flag = False
-    for i in range (x_max+2):
-        for j in range (y_max+2):
-            for k in range (z_max+2):
-                if (i,j,k) in drops.keys():
-                    in_flag = not in_flag
-                    if in_flag:
-                        blocked_by = (i,j,k)
-
-                elif in_flag:
-                    blocked[(i,j,k)] += 1
-
-                
-                if blocked[(i,j,k)] == 3:
-                    drops[(i,j,k)] = 6
-
-    return drop_test(drops)
 
 if __name__ == "__main__":
 
     data = read_text_file("18.txt")
     #print(data)
     print(part_1(data))
+    print(part_2(data))
 
     print(part_2(data))
 
