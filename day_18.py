@@ -1,6 +1,6 @@
 import re
 from functools import reduce
-from collections import deque
+from collections import deque, defaultdict
 
 def read_text_file (file_path):
 
@@ -15,6 +15,27 @@ def read_text_file (file_path):
 
 
 def drop_test(drops):
+    for key in drops.keys():
+        
+        test_list = [-1, 0, 1]
+
+        for i in test_list:
+            for j in test_list:
+                for k in test_list:
+                    if abs(i) + abs(j) + abs(k) == 1:
+                        t = (key[0]+i, key[1]+j, key[2]+k)
+                        if t in drops.keys():
+                            drops[key] -= 1
+
+    return sum(drops.values())
+
+def part_1(data):
+
+    drops = dict()
+
+    for row in data:
+        drops[tuple(t for t in row)] = 6
+
     for key in drops.keys():
         
         test_list = [-1, 0, 1]
@@ -45,7 +66,7 @@ def part_2(data):
         
         next = search.popleft()
 
-        print(next)
+        #print(next)
 
         if next in drops:
             faces += 1
@@ -63,9 +84,6 @@ def part_2(data):
 if __name__ == "__main__":
 
     data = read_text_file("18.txt")
-    #print(data)
     print(part_1(data))
-    print(part_2(data))
-
     print(part_2(data))
 

@@ -15,7 +15,6 @@ class TestMethods(unittest.TestCase):
         total = day_18.part_2(test_data)
         self.assertEqual(total, 10)
 
-
     def test_2(self):
         test_data = day_18.read_text_file("18_test.txt")
         #test_data = day_18.parse_data(test_data)
