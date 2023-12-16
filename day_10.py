@@ -69,7 +69,7 @@ def part_1(data, refs):
         if re.match("noop", instruct):
             cpu.noop()
 
-        elif i := re.match("addx (-*\d+)", instruct):
+        elif i := re.match(r"addx (-*\d+)", instruct):
             cpu.addx(int(i.group(1)))
             
         else:
@@ -84,7 +84,7 @@ def part_2(data):
         if re.match("noop", instruct):
             cpu.noop()
 
-        elif i := re.match("addx (-*\d+)", instruct):
+        elif i := re.match(r"addx (-*\d+)", instruct):
             cpu.addx(int(i.group(1)))
             
         else:

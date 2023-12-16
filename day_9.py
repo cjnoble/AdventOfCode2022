@@ -95,7 +95,7 @@ def part_1(moves):
 
     for move in moves:
 
-        move = re.match("([LRUD]) (\d+)", move)
+        move = re.match(r"([LRUD]) (\d+)", move)
         direction = move.group(1)
         i = int(move.group(2))
         head.move(direction, i)
@@ -114,7 +114,7 @@ def part_2(moves, N):
         tail.next_head = head_2
 
     for move in moves:
-        move = re.match("([LRUD]) (\d+)", move)
+        move = re.match(r"([LRUD]) (\d+)", move)
         direction = move.group(1)
         i = int(move.group(2))
         heads[0].move(direction, i)

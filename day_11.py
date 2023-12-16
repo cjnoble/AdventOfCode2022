@@ -18,11 +18,11 @@ def parse_input(data:deque, worry_reduction):
     while data:
         next_line = data.popleft()
 
-        if s := re.match("Monkey (\d+)", next_line):
+        if s := re.match(r"Monkey (\d+)", next_line):
             monkeys.append(Monkey(s.group(1), worry_reduction))
 
         elif re.search("Starting items", next_line):
-            items = re.findall("\d+", next_line)
+            items = re.findall(r"\d+", next_line)
             items = [int(i) for i in items]
             monkeys[-1].add_items(items)
 
@@ -31,8 +31,8 @@ def parse_input(data:deque, worry_reduction):
 
         elif re.search("Test", next_line):
             monkeys[-1].set_test(next_line)
-            monkeys[-1].m1 = int(re.search("(\d+)", data.popleft()).group(1))
-            monkeys[-1].m2 = int(re.search("(\d+)", data.popleft()).group(1))     
+            monkeys[-1].m1 = int(re.search(r"(\d+)", data.popleft()).group(1))
+            monkeys[-1].m2 = int(re.search(r"(\d+)", data.popleft()).group(1))     
 
     
     divs = [monkey.div for monkey in monkeys]
@@ -88,7 +88,7 @@ class Monkey(object):
         return f"Monkey {self.N}: {self.items}"
 
     def set_operation(self, line):
-        if s:= re.search("(old) ([+*]) (\d+)", line):
+        if s:= re.search(r"(old) ([+*]) (\d+)", line):
             operator = s.group(2)
             self.operand = int(s.group(3))
             if operator == "+":
@@ -108,7 +108,7 @@ class Monkey(object):
                 raise NotImplementedError(f"{operator} not implemented")
 
     def set_test(self, line):
-        s = re.search("divisible by (\d+)", line)
+        s = re.search(r"divisible by (\d+)", line)
         self.div = int(s.group(1))
         self.test = lambda x: x%self.div==0
 
